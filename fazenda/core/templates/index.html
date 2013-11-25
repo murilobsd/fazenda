@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,7 +12,7 @@
     <title>GerCana - Controle eficiente da sua fazenda</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -23,7 +24,7 @@
     <![endif]-->
 
     <!-- Custom styles for this template -->
-    <link href="{{ STATIC_URL }}css/carousel.css" rel="stylesheet">
+    <link href="{% static "css/carousel.css" %}" rel="stylesheet">
   </head>
 <!-- NAVBAR ================================================== -->
   <body>
@@ -204,8 +205,8 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ STATIC_URL }}js/jquery-1.10.2.min.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-    <script src="{{ STATIC_URL }}js/holder.js"></script>
+    <script src="{% static "js/jquery-1.10.2.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/holder.js" %}"></script>
   </body>
 </html>
