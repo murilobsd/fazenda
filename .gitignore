@@ -6,3 +6,5 @@ lib
 *.pyc
 *~
 *.sqlite3
+*.tmproj
+*.xls

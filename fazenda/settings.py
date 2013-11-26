@@ -48,8 +48,8 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR.child('staticfiles')
 STATIC_URL = '/static/'
-MEDIA_ROOT = ''
-MEDIA_URL = ''
+MEDIA_ROOT = BASE_DIR + '/media' # Esta correto ?
+MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = ()
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
