@@ -13,10 +13,10 @@ class Fazenda(models.Model):
     Fazenda do Murilo
     '''
     
-    nome = models.CharField(max_length=200)
-    area_integral = models.DecimalField(max_digits=10, decimal_places=2) # Área Integra
+    nome            = models.CharField(max_length=200)
+    area_integral   = models.DecimalField(max_digits=10, decimal_places=2) # Área Integra
     arean_cultivada = models.DecimalField(max_digits=10, decimal_places=2) # Área Não Cultivada
-    criacao = models.DateTimeField(auto_now_add=True)
+    criacao         = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['-criacao']
@@ -30,11 +30,11 @@ class Ciclo(models.Model):
     a cada um ano surge um ciclo novo
     
     # Criando um ciclo ?
-    >>> ciclo_atual = Ciclo.objects.create(nome='2013', fazenda='') 
+    >>> ciclo_atual = Ciclo.objects.create(nome='2013', fazenda='fazenda_m')
     '''
     
     criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200) # Ciclo 2013, 2014...
+    nome    = models.CharField(max_length=200) # Ciclo 2013, 2014...
     fazenda = models.ForeignKey(Fazenda)
     
     class Meta:
@@ -46,11 +46,16 @@ class Ciclo(models.Model):
 class Zona(models.Model):
     '''
     Classe para instanciar os Talhoes
+    
+    # Criando uma Zona
+    >>> zona1 = Zona.objects.create(nome='1')
+    >>> zona1.nome
+    1
     '''
     
     criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200) # Zona 1, Zona 2
-    ciclo = models.ForeignKey(Ciclo)
+    nome    = models.CharField(max_length=200) # Zona 1, Zona 2
+    ciclo   = models.ForeignKey(Ciclo)
     
     class Meta:
         ordering = ['-criacao']
@@ -64,7 +69,7 @@ class Variedade(models.Model):
     '''
     
     criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200) # RFB1298, RB1872827 ...
+    nome    = models.CharField(max_length=200) # RFB1298, RB1872827 ...
     fazenda = models.ForeignKey(Fazenda)
     
     class Meta:
@@ -80,7 +85,7 @@ class TipoProduto(models.Model):
     '''
     
     criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200) # RFB1298, RB1872827 ...
+    nome    = models.CharField(max_length=200) # RFB1298, RB1872827 ...
     fazenda = models.ForeignKey(Fazenda)
     
     class Meta:
@@ -95,16 +100,16 @@ class Produto(models.Model):
     '''
     
     UNIDADES = (
-            ('K', 'Kilograma'),
-            ('G', 'Gramas'),
-            ('L', 'Litros'),
-            ('M', 'Mililitros')
-        )
+        ('K', 'Kilograma'),
+        ('G', 'Gramas'),
+        ('L', 'Litros'),
+        ('M', 'Mililitros')
+    )
     
-    criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200)
-    tipo_produto = models.ForeignKey(TipoProduto)
-    unidade = models.CharField(max_length=2, choices=UNIDADES)
+    criacao         = models.DateTimeField(auto_now_add=True)
+    nome            = models.CharField(max_length=200)
+    tipo_produto    = models.ForeignKey(TipoProduto)
+    unidade         = models.CharField(max_length=2, choices=UNIDADES)
     
     class Meta:
         ordering = ['-criacao']
@@ -117,14 +122,15 @@ class Tabela(models.Model):
     Classe que instancia as Tabelas
     '''
     
-    criacao = models.DateTimeField(auto_now_add=True)
-    nome = models.CharField(max_length=200) # Tabela 1, Tabela 2
-    zona = models.ForeignKey(Zona)
-    area = models.DecimalField(max_digits=10, decimal_places=2)
-    area_muda = models.DecimalField(max_digits=10, decimal_places=2)
+    criacao     = models.DateTimeField(auto_now_add=True)
+    nome        = models.CharField(max_length=200) # Tabela 1, Tabela 2
+    zona        = models.ForeignKey(Zona)
+    area        = models.DecimalField(max_digits=10, decimal_places=2)
+    area_muda   = models.DecimalField(max_digits=10, decimal_places=2)
     area_moagem = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
-    variedade = models.ForeignKey(Variedade)
-    corte = models.CharField(max_length=100)
+    variedade   = models.ForeignKey(Variedade)
+    corte       = models.CharField(max_length=100)
+    arquivo     = models.FileField(upload_to='gps/%Y/%b/%d')
     
     class Meta:
         ordering = ['-criacao']
@@ -134,8 +140,6 @@ class Tabela(models.Model):
     
     def save(self, *args, **kwargs):
         if self.pk is None:
-            # Prestar atencao aqui e ver se realmente é possivel fazer essa conta
-            # A area da moagem = area - area_muda
             self.area_moagem = self.area - self.area_muda
         super(Tabela, self).save(*args, **kwargs)
 
@@ -150,13 +154,13 @@ class Aplicacao(models.Model):
         ('S', 'Cana Soca')
     )
     
-    criacao = models.DateTimeField(auto_now_add=True)
-    tabela = models.ForeignKey(Tabela)
-    data = models.DateField()
-    produto = models.ForeignKey(Produto)
-    quantidade = models.DecimalField(max_digits=10, decimal_places=2)
-    unidade = models.CharField(max_length=1, choices=TIPO_CANA)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
+    criacao     = models.DateTimeField(auto_now_add=True)
+    tabela      = models.ForeignKey(Tabela)
+    data        = models.DateField()
+    produto     = models.ForeignKey(Produto)
+    quantidade  = models.DecimalField(max_digits=10, decimal_places=2)
+    unidade     = models.CharField(max_length=1, choices=TIPO_CANA)
+    total       = models.DecimalField(max_digits=10, decimal_places=2)
     
     class Meta:
         ordering = ['-criacao']
@@ -164,15 +168,15 @@ class Aplicacao(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.tabela, self.produto)
 
-class GpsTabela(Tabela):
+class GPSData(models.Model):
     '''
-    Classe que salva os dados de GPS de cada Tabela
+    Classe para instanciar os dados de latitude e longitude
+    de cada tabela da Zona.
     '''
-    pass
-    #arquivo = models.FileField(upload_to='')
     
-    # Antes de salvar essa model, preciso pegar o arquivo gerado pelo gps
-    # geralmente um xml como é o caso do Garmin, obter os dados de 
-    # latitude e longitude de determinada tabela e por fim salvar
-    # os pontos dessa coordenada!
+    tabela          = models.ForeignKey(Tabela)
+    lon_posicao     = models.DecimalField (max_digits=8, decimal_places=3)
+    lat_posicao     = models.DecimalField (max_digits=8, decimal_places=3)
     
+    def __unicode__(self):
+        return "%s: %s %s" % (self.tabela, self.lon_posicao, self.lat_posicao)
