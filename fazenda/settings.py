@@ -36,7 +36,7 @@ WSGI_APPLICATION = 'fazenda.wsgi.application'
 
 DATABASES = {'default': dj_database_url.config(default='sqlite:///' + BASE_DIR.child('db.sqlite3'))}
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-BR'
 
 TIME_ZONE = 'UTC'
 
@@ -57,3 +57,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+DATE_INPUT_FORMATS = ('%d/%m/%Y')
+DECIMAL_SEPARATOR = '.'
+FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880 # 5MB

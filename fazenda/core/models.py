@@ -1,5 +1,8 @@
 # encoding: utf-8
 from django.db import models
+from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 
 class Fazenda(models.Model):
     '''
@@ -12,8 +15,9 @@ class Fazenda(models.Model):
     >>> fazenda_m
     Fazenda do Murilo
     '''
-    
+    usuario         = models.ForeignKey(User)
     nome            = models.CharField(max_length=200)
+    slug            = models.SlugField(max_length=200)
     area_integral   = models.DecimalField(max_digits=10, decimal_places=2) # Área Integra
     arean_cultivada = models.DecimalField(max_digits=10, decimal_places=2) # Área Não Cultivada
     criacao         = models.DateTimeField(auto_now_add=True)
@@ -23,6 +27,14 @@ class Fazenda(models.Model):
             
     def __unicode__(self):
         return self.nome
+    
+    def get_absolute_url(self):
+        return reverse('fazenda', None, [str(self.slug)])
+    
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.slug = slugify(self.nome)
+        super(Fazenda, self).save(*args, **kwargs)
 
 class Ciclo(models.Model):
     '''
@@ -33,6 +45,7 @@ class Ciclo(models.Model):
     >>> ciclo_atual = Ciclo.objects.create(nome='2013', fazenda='fazenda_m')
     '''
     
+    usuario = models.ForeignKey(User) # Sera que realmente eh necessario usuario em todas as Models?
     criacao = models.DateTimeField(auto_now_add=True)
     nome    = models.CharField(max_length=200) # Ciclo 2013, 2014...
     fazenda = models.ForeignKey(Fazenda)
@@ -53,6 +66,7 @@ class Zona(models.Model):
     1
     '''
     
+    usuario = models.ForeignKey(User)
     criacao = models.DateTimeField(auto_now_add=True)
     nome    = models.CharField(max_length=200) # Zona 1, Zona 2
     ciclo   = models.ForeignKey(Ciclo)
@@ -68,6 +82,7 @@ class Variedade(models.Model):
     Classe para instanciar as Variedades de Cana
     '''
     
+    usuario = models.ForeignKey(User)
     criacao = models.DateTimeField(auto_now_add=True)
     nome    = models.CharField(max_length=200) # RFB1298, RB1872827 ...
     fazenda = models.ForeignKey(Fazenda)
@@ -84,6 +99,7 @@ class TipoProduto(models.Model):
     Produto Adubo, Inseticida...
     '''
     
+    usuario = models.ForeignKey(User)
     criacao = models.DateTimeField(auto_now_add=True)
     nome    = models.CharField(max_length=200) # RFB1298, RB1872827 ...
     fazenda = models.ForeignKey(Fazenda)
@@ -106,6 +122,7 @@ class Produto(models.Model):
         ('M', 'Mililitros')
     )
     
+    usuario         = models.ForeignKey(User)
     criacao         = models.DateTimeField(auto_now_add=True)
     nome            = models.CharField(max_length=200)
     tipo_produto    = models.ForeignKey(TipoProduto)
@@ -122,6 +139,7 @@ class Tabela(models.Model):
     Classe que instancia as Tabelas
     '''
     
+    usuario     = models.ForeignKey(User)
     criacao     = models.DateTimeField(auto_now_add=True)
     nome        = models.CharField(max_length=200) # Tabela 1, Tabela 2
     zona        = models.ForeignKey(Zona)
@@ -130,7 +148,7 @@ class Tabela(models.Model):
     area_moagem = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
     variedade   = models.ForeignKey(Variedade)
     corte       = models.CharField(max_length=100)
-    arquivo     = models.FileField(upload_to='gps/%Y/%b/%d')
+    arquivo     = models.FileField(upload_to='gps/%d/%m/%Y', blank=True)
     
     class Meta:
         ordering = ['-criacao']
@@ -154,6 +172,7 @@ class Aplicacao(models.Model):
         ('S', 'Cana Soca')
     )
     
+    usuario     = models.ForeignKey(User)
     criacao     = models.DateTimeField(auto_now_add=True)
     tabela      = models.ForeignKey(Tabela)
     data        = models.DateField()
@@ -175,8 +194,8 @@ class GPSData(models.Model):
     '''
     
     tabela          = models.ForeignKey(Tabela)
-    lon_posicao     = models.DecimalField (max_digits=8, decimal_places=3)
-    lat_posicao     = models.DecimalField (max_digits=8, decimal_places=3)
+    lon_posicao     = models.DecimalField(max_digits=8, decimal_places=3)
+    lat_posicao     = models.DecimalField(max_digits=8, decimal_places=3)
     
     def __unicode__(self):
         return "%s: %s %s" % (self.tabela, self.lon_posicao, self.lat_posicao)
