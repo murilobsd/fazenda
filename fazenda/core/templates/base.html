@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="gestão agrícola, cana, cana-de-açucar, gestão">
+    <meta name="author" content="Murilo Ijanc">
+
+    <title>{% block title %}{% endblock %} | GerCana - Gerenciador de Fazenda</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{% static "css/modern-business.css" %}" rel="stylesheet">
+    <link href="{% static "font-awesome/css/font-awesome.min.css" %}" rel="stylesheet">
+  </head>
+
+  <body>
+
+	<!-- Menu -->
+	{% include 'menu.html' %}
+	
+    <!-- Containers -->
+	{% block container %}{% endblock %}
+
+    <div class="container">
+
+      <hr>
+		<!-- Footer -->
+      	{% include 'footer.html' %}
+
+    </div><!-- /.container -->
+
+    <!-- JavaScript -->
+    <script src="{% static "js/jquery-1.10.2.js " %}"></script>
+    <script src="{% static "js/bootstrap.js " %}"></script>
+    <script src="{% static "js/modern-business.js " %}"></script>
+
+  </body>
+</html>
