@@ -1,14 +1,18 @@
-import dj_database_url
+# encoding: utf-8
+
 from unipath import Path
+from decouple import config
+from dj_database_url import parse as db_url
+
 BASE_DIR = Path(__file__).parent
 
-SECRET_KEY = '1o$+gx5uw@rgtwypmkro&hqqujra_g01ju@xs9ojucytidz)o5'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-TEMPLATE_DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com', '.localhost']
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -34,7 +38,7 @@ ROOT_URLCONF = 'fazenda.urls'
 WSGI_APPLICATION = 'fazenda.wsgi.application'
 
 
-DATABASES = {'default': dj_database_url.config(default='sqlite:///' + BASE_DIR.child('db.sqlite3'))}
+DATABASES = {'default': config('DATABASE_URL', default='sqlite:///' + BASE_DIR.child('db.sqlite3'), cast=db_url)}
 
 LANGUAGE_CODE = 'pt-BR'
 
