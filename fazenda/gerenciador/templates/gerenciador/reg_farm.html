@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastrar Fazenda{% endblock %}
+
+{% block container %}
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">Cadastrar Fazenda</h1>
+				<form class="form-horizontal" role="form" action="." method="POST">
+					{% csrf_token %}
+				  <div class="form-group">
+				    <label for="{{ form.name.id_for_label }}" class="col-sm-2 control-label">{{ form.name.label }}</label>
+				    <div class="col-xs-4">
+				      	{{ form.name }}
+						{{ form.name.errors }}
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="{{ form.full_area.id_for_label }}" class="col-sm-2 control-label">{{ form.full_area.label }}</label>
+				    <div class="col-xs-4">
+					  {{ form.full_area }}
+					  {{ form.full_area.errors }}
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for="{{ form.uncultivated_area.id_for_label }}" class="col-sm-2 control-label">{{ form.uncultivated_area.label }}</label>
+				    <div class="col-xs-4">
+						{{ form.uncultivated_area }}
+						{{ form.uncultivated_area.errors }}
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default">Cadastrar</button>
+				    </div>
+				  </div>
+				</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+

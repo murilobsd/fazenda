@@ -1,4 +1,4 @@
-# encoding: utf-8
+# coding: utf-8
 
 from unipath import Path
 from decouple import config
@@ -21,7 +21,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fazenda.core', 
+    'fazenda.core',
+    'fazenda.gerenciador', 
 )
 
 MIDDLEWARE_CLASSES = (
